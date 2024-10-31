@@ -17,7 +17,7 @@
     "windows",
     "linux"
   ],
-  "author": "Your Name",
+  "author": "heymeowcat",
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.11.0",

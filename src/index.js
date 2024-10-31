@@ -72,7 +72,7 @@ async function generateIcons(inputPath, outputPath) {
 
 // Only run directly if this file is being executed directly
 if (require.main === module) {
-  const SOURCE_ICON = "Content.png";
+  const SOURCE_ICON = "../Content.png";
   const OUTPUT_DIR = "build";
   generateIcons(SOURCE_ICON, OUTPUT_DIR).catch(console.error);
 }

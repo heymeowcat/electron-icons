@@ -1,7 +1,8 @@
+#!/usr/bin/env node
+
 const generateIcons = require("../src/index");
 const path = require("path");
 const fs = require("fs");
-
 const argv = require("yargs")
   .usage("Usage: $0 -i [input] -o [output]")
   .option("i", {
@@ -21,7 +22,7 @@ const argv = require("yargs")
 
 const run = async () => {
   try {
-    // Resolve paths relative to current working directory
+    // Resolve paths relative to the current working directory
     const inputPath = path.resolve(process.cwd(), argv.input);
     const outputPath = path.resolve(process.cwd(), argv.output);
 
@@ -33,7 +34,7 @@ const run = async () => {
     // Create output directory if it doesn't exist
     fs.mkdirSync(outputPath, { recursive: true });
 
-    // Check if we have write permission
+    // Check for write permissions
     try {
       fs.accessSync(path.dirname(outputPath), fs.constants.W_OK);
     } catch (error) {
@@ -45,6 +46,7 @@ const run = async () => {
     console.log("Input file:", inputPath);
     console.log("Output directory:", outputPath);
 
+    // Generate icons
     await generateIcons(inputPath, outputPath);
 
     console.log("\nIcons generated successfully!");
@@ -59,7 +61,6 @@ const run = async () => {
     const missingFiles = expectedFiles.filter(
       (file) => !fs.existsSync(path.join(outputPath, file))
     );
-
     if (missingFiles.length > 0) {
       console.warn("\nWarning: Some files were not generated:");
       missingFiles.forEach((file) => console.warn(`- ${file}`));
