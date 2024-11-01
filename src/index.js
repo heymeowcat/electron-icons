@@ -5,6 +5,7 @@ const pngToIco = require("png-to-ico");
 const { exec } = require("child_process");
 const { promisify } = require("util");
 const execAsync = promisify(exec);
+const os = require("os");
 
 // MacOS icon specifications
 const MACOS_SPECS = [
@@ -33,22 +34,31 @@ async function generateIcons(inputPath, outputPath) {
     // Create output directory
     fs.mkdirSync(outputPath, { recursive: true });
 
-    // Generate macOS icons (ICNS)
-    const iconSetDir = path.join(outputPath, "icon.iconset");
-    fs.mkdirSync(iconSetDir, { recursive: true });
+    // Generate macOS icons (ICNS) only if on macOS
+    if (os.platform() === "darwin") {
+      const iconSetDir = path.join(outputPath, "icon.iconset");
+      fs.mkdirSync(iconSetDir, { recursive: true });
 
-    // Generate the 10 layers for macOS
-    for (const spec of MACOS_SPECS) {
-      const iconBuffer = await generateIcon(inputPath, spec.size);
-      fs.writeFileSync(path.join(iconSetDir, spec.filename), iconBuffer);
+      // Generate the 10 layers for macOS
+      for (const spec of MACOS_SPECS) {
+        const iconBuffer = await generateIcon(inputPath, spec.size);
+        fs.writeFileSync(path.join(iconSetDir, spec.filename), iconBuffer);
+      }
+
+      // Create ICNS file
+      const icnsOutputPath = path.join(outputPath, "icon.icns");
+      await execAsync(
+        `iconutil -c icns -o "${icnsOutputPath}" "${iconSetDir}"`
+      );
+
+      // Remove temporary iconset folder
+      fs.rmSync(iconSetDir, { recursive: true });
+      console.log("- icon.icns (macOS)");
+    } else {
+      console.log(
+        "Skipping .icns creation: iconutil is only available on macOS"
+      );
     }
-
-    // Create ICNS file
-    const icnsOutputPath = path.join(outputPath, "icon.icns");
-    await execAsync(`iconutil -c icns -o "${icnsOutputPath}" "${iconSetDir}"`);
-
-    // Remove temporary iconset folder
-    fs.rmSync(iconSetDir, { recursive: true });
 
     // Generate Windows icon (ICO)
     await pngToIco(inputPath)
@@ -64,7 +74,9 @@ async function generateIcons(inputPath, outputPath) {
     fs.writeFileSync(path.join(outputPath, "icon.png"), linuxIconBuffer);
 
     console.log("Icon generation complete. Generated:");
-    console.log("- icon.icns (macOS)");
+    if (os.platform() === "darwin") {
+      console.log("- icon.icns (macOS)");
+    }
     console.log("- icon.ico (Windows)");
     console.log("- icon.png (Linux)");
   } catch (error) {
