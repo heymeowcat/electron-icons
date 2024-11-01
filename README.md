@@ -23,8 +23,8 @@ Then run:
 ## Generated Files
 
 - `icon.icns` - macOS icon (includes layers)
-- `icon.png` - Windows icon (256x256)
-- `icon_512x512.png` - Linux icon
+- `icon.ico` - Windows icon
+- `icon.png` - Linux icon
 
 ## Requirements
 
