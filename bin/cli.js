@@ -51,13 +51,9 @@ const run = async () => {
 
     console.log("\nIcons generated successfully!");
     console.log(`Output directory: ${outputPath}`);
-    console.log("Generated files:");
-    console.log("- icon.icns (macOS)");
-    console.log("- icon.png (Windows - 256x256)");
-    console.log("- icon_512x512.png (Linux)");
 
     // Verify files were created
-    const expectedFiles = ["icon.icns", "icon.png", "icon_512x512.png"];
+    const expectedFiles = ["icon.icns", "icon.png", "icon.ico"];
     const missingFiles = expectedFiles.filter(
       (file) => !fs.existsSync(path.join(outputPath, file))
     );

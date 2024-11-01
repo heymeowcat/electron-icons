@@ -53,7 +53,6 @@ async function generateIcons(inputPath, outputPath) {
 
       // Remove temporary iconset folder
       fs.rmSync(iconSetDir, { recursive: true });
-      console.log("- icon.icns (macOS)");
     } else {
       console.log(
         "Skipping .icns creation: iconutil is only available on macOS"
