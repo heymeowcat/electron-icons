@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.11.0",
+    "png-to-ico": "^2.1.8",
     "yargs": "^17.7.2"
   },
   "repository": {
